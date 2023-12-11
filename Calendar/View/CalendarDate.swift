@@ -10,23 +10,26 @@ import SwiftUI
 struct CalendarDate: View {
     
     @State var isActive: Bool = true
-    @State var dateOpacity: Double = 1.0
+    var dateOpacity: Double
     
-    var currentDay: Date = .now
+    var currentDay: Date
     var date: String
-    
+//    var calendarDateString: String
     let formater: DateFormatter = DateFormatter()
     
     init(isActive: Bool, calendarDate: Date = .now) {
         formater.dateFormat = "dd"
+        currentDay = calendarDate
         self.date = formater.string(from: calendarDate)
-        self.isActive = isActive
+        dateOpacity = isActive ? 1.0 : 0.5
+        formater.dateFormat = "dd-MM-yyyy"
+        print(isActive)
     }
     
     var body: some View {
         ZStack{
             Circle()
-                .fill(.white)
+                .fill(Calendar.current.isDateInToday(currentDay) ? .indigo : .white)
                 .shadow(radius: 5)
                 .frame(width: 45)
             Text(self.date)
@@ -39,14 +42,13 @@ struct CalendarDate: View {
         }
         .opacity(dateOpacity)
     }
-    private func activate() -> Void{
-        withAnimation(.easeIn(duration: 0.1), {self.dateOpacity = self.dateOpacity == 0.5 ? 1 : 0.5})
-    }
-//    private func currentDay() -> Void{
-//        
-//    }
 }
 
 #Preview {
-    CalendarDate(isActive: true, calendarDate: .now)
+    HStack{
+        CalendarDate(isActive: true, calendarDate: .now)
+        CalendarDate(isActive: false, calendarDate: .now)
+        CalendarDate(isActive: true, calendarDate: .distantPast)
+        CalendarDate(isActive: false, calendarDate: .distantPast)
+    }
 }
