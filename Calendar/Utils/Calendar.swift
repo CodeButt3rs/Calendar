@@ -30,16 +30,21 @@ struct Month{
         self.days = days
     }
     
-    let months: [String] = ["", "Январь", "Февраль", "Марта", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+    let months: [String] = ["", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     
     var monthInt: Int
     var monthString: String {get {months[monthInt]}}
     var days: [Day]
 }
-struct Day{
-    init(dayInt: Int) {
-        self.dayInt = dayInt
+struct Day: Identifiable, Hashable{
+    var id: String {get {return dayString}}
+    
+    init(dayString: String, isActive: Bool = false) {
+        self.dayString = dayString
+        activeDay = isActive
     }
-    var dayInt: Int
-    var dayString: String {get {String(dayInt)}}
+    var activeDay: Bool = false
+    var dayString: String
 }
+
+
